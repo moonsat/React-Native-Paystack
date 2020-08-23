@@ -19,15 +19,17 @@ function PaystackWebView(props) {
 
     const CUSTOMER_FIRSTNAME = props.customerFirstName;
 
-    const CUSTOMER_LASTNAME = props.customerLastName;
+    const CUSTOMER_LASTNAME = props.customerLastName; 
 
-    const AMOUNT_TO_CHARGE = props.amount;
+    const AMOUNT_TO_CHARGE = props.amount; //payment amount
 
-    const CURRENCY = props.currency;
+    const CURRENCY = props.currency; // charge currency
 
-    const INDICATOR_COLOR = props.indicatorColor;
+    const INDICATOR_COLOR = props.indicatorColor; // indicator color
 
-    const LABEL = props.label;
+    const LABEL = props.label; // label for checkout 
+
+    const METADATA = props.metadata;  // extra paystack payment metadata
 
     const [paystackLoadingStatus, setPaystackLoadingStatus] = useState(Status.DEFAULT);
 
@@ -71,6 +73,7 @@ function PaystackWebView(props) {
                     firstname: '${CUSTOMER_FIRSTNAME}',
                     lastname: '${CUSTOMER_LASTNAME}',
                     label: '${LABEL || EMAIL_ADDRESS}',
+                    metadata: ${JSON.stringify(METADATA || {})},
                     callback: function(response){
                             var resp = {success:true, paystack:response};
                             window.ReactNativeWebView.postMessage(JSON.stringify(resp))
@@ -241,13 +244,14 @@ PaystackWebView.propTypes = {
     indicatorColor: PropTypes.string,
     renderIndicator: PropTypes.func,
     label: PropTypes.string,
-
+    metadata: PropTypes.object,
 }
 
 PaystackWebView.defaultProps = {
 
     indicatorColor: "#126B9D",
     currency: "NGN",
+    metadata: {},
 
 }
 
