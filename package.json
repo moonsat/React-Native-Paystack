@@ -27,5 +27,8 @@
   "homepage": "https://github.com/moonsat/React-Native-Paystack#readme",
   "devDependencies": {
     "metro-react-native-babel-preset": "^0.63.0"
+  },
+  "dependencies": {
+    "react-native-webview": "^10.7.0"
   }
 }
