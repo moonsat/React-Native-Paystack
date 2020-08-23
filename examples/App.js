@@ -30,7 +30,9 @@ const App =  () => {
     <View style={{flex:1}}>
     
 
-      <PaystackWebView     paystackKey={"pk_test_caf268193fad2d15a202977bd8553184c99a52dd"} customerEmail={"alexsirguy@gmail.com"} amount={100000}  />
+      <PaystackWebView 
+      
+      paystackKey={"pk_test_caf268193fad2d15a202977bd8553184c99a52dd"} customerEmail={"alexsirguy@gmail.com"} amount={100000}  />
 
     </View>
   );

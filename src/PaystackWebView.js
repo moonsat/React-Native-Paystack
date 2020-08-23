@@ -26,7 +26,9 @@ function PaystackWebView(props) {
 
     const CURRENCY = props.currency || "NGN";
 
-    const INDICATOR_COLOR = props.indicatorColor || "#00FF00";
+    const INDICATOR_COLOR = props.indicatorColor || "#126B9D";
+
+    const LABEL = props.label;
 
     const [paystackLoadingStatus, setPaystackLoadingStatus] = useState(Status.DEFAULT);
 
@@ -42,7 +44,6 @@ function PaystackWebView(props) {
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
     <head>
     
-    <p>Hello</p>
     <body  style="background-color:#fff;height:100vh">
   
     <script src="https://js.paystack.co/v1/inline.js"></script>
@@ -55,11 +56,12 @@ function PaystackWebView(props) {
                 
                 if(!window.PaystackPop){ //if paystack is loaded
 
-                    var resp = {reason:'failed', success:false,paystack:null};
+                    var resp = {reason:'failed', success:false, paystack:null};
 
                     window.ReactNativeWebView.postMessage(JSON.stringify(resp))
                 
                 }
+
                 else{
 
                     var handler = PaystackPop.setup({ 
@@ -67,8 +69,9 @@ function PaystackWebView(props) {
                     email: '${EMAIL_ADDRESS}',
                     amount: ${AMOUNT_TO_CHARGE},
                     currency: '${CURRENCY}',
-                    firstname: '${CUSTOMER_FIRSTNAME}'
-                    lastname: '${CUSTOMER_LASTNAME}'
+                    firstname: '${CUSTOMER_FIRSTNAME}',
+                    lastname: '${CUSTOMER_LASTNAME}',
+                    label: '${LABEL || EMAIL_ADDRESS}',
                     callback: function(response){
                             var resp = {success:true, paystack:response};
                             window.ReactNativeWebView.postMessage(JSON.stringify(resp))
@@ -92,22 +95,39 @@ function PaystackWebView(props) {
     </html>`;
 
 
-    const getPaymentWidgetErrorView = () => {
 
-        return (
+    const onSuccess = (response)=>{
 
-            <View style={{ flex: 1, alignItem: "center", justifyContent: "center" }}>
+        if(props.onSuccess){
 
+            props.onSuccess(response);
 
-                <Text>Error page</Text>
-
-
-            </View>
-
-        );
-
+        }
 
     }
+
+    const onDismissed = ()=>{
+
+        if(props.onDismissed){
+            
+            props.onDismissed();
+
+        }
+
+    }
+
+    const onError = ()=>{
+
+        if(props.onError){
+
+            props.onError();
+        
+        }
+
+    }
+
+
+   
 
 
 
@@ -123,12 +143,12 @@ function PaystackWebView(props) {
                 javaScriptEnabled={true} //enabling JavaScript
 
                 onLoadStart={() => {
+
                     setPaystackLoadingStatus(Status.LOADING);
+                
                 }}
 
                 onLoadEnd={(event) => {
-
-                    alert("finished loading...");
 
                     setPaystackLoadingStatus(Status.LOADED);
 
@@ -141,29 +161,28 @@ function PaystackWebView(props) {
 
                     var response = JSON.parse(result);
 
-                    if (response.success) {
+                    if (response.success && response.paystack) {
 
-                        var paystackTransactionReferenceCode = response.paystack.reference;
-
-                        alert('success...');
-
-                        alert(paystackTransactionReferenceCode);
-
-                        // props.navigation.goBack();
-
-                        // props.onPaymentCompleted({'reference':paystackTransactionReferenceCode})
+                        onSuccess(response.paystack);
+                        
 
                     }
 
                     else {
 
-                        alert(response.reason);
+                        if(response.reason == "closed"){
 
-                        alert("error...")
+                            onDismissed();
 
-                        // props.navigation.goBack();
+                        }
 
-                        // props.onPaymentFailed();
+                        else{
+
+                            onError();
+
+                        }
+
+                     
                     }
 
 
@@ -188,28 +207,16 @@ function PaystackWebView(props) {
 
     const getMainComponent = () => {
 
-            if (paystackLoadingStatus) {
+        switch (paystackLoadingStatus) {
 
-                switch (paystackLoadingStatus) {
+            case Status.LOADING:
 
-                    case Status.LOADING:
+                return props.progressIndicator ? props.progressIndicator() : getLoadingView();
 
-                        return getLoadingView();
+            default:
+                return <View></View>
 
-                    case Status.LOADED:
-                        return <View></View>
-
-                    case Status.ERROR:
-                        return getPaymentWidgetErrorView();
-
-                }
-
-            }
-
-            else {
-
-                return getLoadingView();
-            }
+        }
 
     }
 
@@ -234,7 +241,13 @@ PaystackWebView.propTypes = {
     amount: PropTypes.number.isRequired,
     customerFirstName: PropTypes.string,
     customerLastName: PropTypes.string,
-    currency: PropTypes.string
+    currency: PropTypes.string,
+    onError: PropTypes.func,
+    onDismiss: PropTypes.func,
+    onSuccess: PropTypes.func,
+    indicatorColor: PropTypes.string,
+    progressIndicator: PropTypes.func,
+    label: PropTypes.string,
 
 }
 
