@@ -1,4 +1,3 @@
-import React, { Component, useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import React, { Component, useState, useEffect, useRef } from 'react';
 import { View, Text, ActivityIndicator, } from 'react-native'
@@ -15,12 +14,15 @@ const Status = { //status enums
 function PaystackWebView(props) {
 
    
-
     const PAYSTACK_KEY = props.paystackKey;
 
-    const EMAIL_ADDRESS = props.emailAddress;
+    const EMAIL_ADDRESS = props.customerEmail;
 
-    const AMOUNT_TO_CHARGE = props.amountToCharge;
+    const CUSTOMER_FIRSTNAME = props.customerFirstName;
+
+    const CUSTOMER_LASTNAME = props.customerLastName;
+
+    const AMOUNT_TO_CHARGE = props.amount;
 
     const CURRENCY = props.currency || "NGN";
 
@@ -40,33 +42,48 @@ function PaystackWebView(props) {
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
     <head>
     
-    <body style="background-color:#fff;height:100vh">
+    <p>Hello</p>
+    <body  style="background-color:#fff;height:100vh">
   
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <script type="text/javascript">
+    
             window.onload = payWithPaystack;
+
             function payWithPaystack(){
-               
-            var handler = PaystackPop.setup({ 
-              key: '${PAYSTACK_KEY}',
-              email: '${EMAIL_ADDRESS}',
-              amount: ${AMOUNT_TO_CHARGE},
-              currency: '${CURRENCY}',
-              callback: function(response){
-                    var resp = {success:true, paystack:response};
-                     window.ReactNativeWebView.postMessage(JSON.stringify(resp))
-              },
-              onClose: function(){
-               
-                var resp = {success:false, paystack:null};
+         
+                
+                if(!window.PaystackPop){ //if paystack is loaded
 
-                window.ReactNativeWebView.postMessage(JSON.stringify(resp))
+                    var resp = {reason:'failed', success:false,paystack:null};
 
-              }
+                    window.ReactNativeWebView.postMessage(JSON.stringify(resp))
+                
+                }
+                else{
 
-              });
-              handler.openIframe();
-              }
+                    var handler = PaystackPop.setup({ 
+                    key: '${PAYSTACK_KEY}',
+                    email: '${EMAIL_ADDRESS}',
+                    amount: ${AMOUNT_TO_CHARGE},
+                    currency: '${CURRENCY}',
+                    firstname: '${CUSTOMER_FIRSTNAME}'
+                    lastname: '${CUSTOMER_LASTNAME}'
+                    callback: function(response){
+                            var resp = {success:true, paystack:response};
+                            window.ReactNativeWebView.postMessage(JSON.stringify(resp))
+                    },
+                    onClose: function(){
+                    
+                        var resp = {reason:'closed', success:false, paystack:null};
+
+                        window.ReactNativeWebView.postMessage(JSON.stringify(resp))
+
+                    }
+
+                    });
+                    handler.openIframe();
+              }}
             
     </script> 
 </body>
@@ -111,11 +128,13 @@ function PaystackWebView(props) {
 
                 onLoadEnd={(event) => {
 
+                    alert("finished loading...");
+
                     setPaystackLoadingStatus(Status.LOADED);
 
                 }}
 
-
+             
                 onMessage={(event) => {
 
                     var result = event.nativeEvent.data;
@@ -138,6 +157,8 @@ function PaystackWebView(props) {
 
                     else {
 
+                        alert(response.reason);
+
                         alert("error...")
 
                         // props.navigation.goBack();
@@ -157,7 +178,6 @@ function PaystackWebView(props) {
     const getLoadingView = () => {
 
         return <View style={{ flex: 1, justifyContent: "center", alignItem: "center" }}>
-
 
             <ActivityIndicator size={'large'} color={INDICATOR_COLOR} style={{ alignSelf: "center" }}></ActivityIndicator>
 
@@ -195,14 +215,26 @@ function PaystackWebView(props) {
 
     return (
 
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, height:"100%", width:"100%" }}>
 
             {getMainComponent()}
 
-            {paystackLoadingStatus == Status.LOADED &&  getPaystackWidget()}
+            {paystackLoadingStatus != Status.ERROR &&  getPaystackWidget()}
 
         </View>
     )
+
+}
+
+
+PaystackWebView.propTypes = {
+
+    paystackKey: PropTypes.string.isRequired,
+    customerEmail: PropTypes.string.isRequired,
+    amount: PropTypes.number.isRequired,
+    customerFirstName: PropTypes.string,
+    customerLastName: PropTypes.string,
+    currency: PropTypes.string
 
 }
 
