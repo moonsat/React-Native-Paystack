@@ -13,7 +13,6 @@ const Status = { //status enums
 
 function PaystackWebView(props) {
 
-   
     const PAYSTACK_KEY = props.paystackKey;
 
     const EMAIL_ADDRESS = props.customerEmail;
@@ -24,9 +23,9 @@ function PaystackWebView(props) {
 
     const AMOUNT_TO_CHARGE = props.amount;
 
-    const CURRENCY = props.currency || "NGN";
+    const CURRENCY = props.currency;
 
-    const INDICATOR_COLOR = props.indicatorColor || "#126B9D";
+    const INDICATOR_COLOR = props.indicatorColor;
 
     const LABEL = props.label;
 
@@ -127,12 +126,6 @@ function PaystackWebView(props) {
     }
 
 
-   
-
-
-
-
-
     const getPaystackWidget = () => {
 
         return <View style={{ height: paystackLoadingStatus == Status.LOADED ? "100%" : "0%" }}>
@@ -196,9 +189,9 @@ function PaystackWebView(props) {
 
     const getLoadingView = () => {
 
-        return <View style={{ flex: 1, justifyContent: "center", alignItem: "center" }}>
+        return <View style={{ flex: 1, justifyContent: "center",  alignContent:"center", alignSelf:"center" }}>
 
-            <ActivityIndicator size={'large'} color={INDICATOR_COLOR} style={{ alignSelf: "center" }}></ActivityIndicator>
+            {props.renderIndicator ? props.renderIndicator() : <ActivityIndicator size={'large'} color={INDICATOR_COLOR}></ActivityIndicator>}
 
         </View>
 
@@ -211,7 +204,7 @@ function PaystackWebView(props) {
 
             case Status.LOADING:
 
-                return props.progressIndicator ? props.progressIndicator() : getLoadingView();
+                return  getLoadingView();
 
             default:
                 return <View></View>
@@ -226,7 +219,7 @@ function PaystackWebView(props) {
 
             {getMainComponent()}
 
-            {paystackLoadingStatus != Status.ERROR &&  getPaystackWidget()}
+            {getPaystackWidget()}
 
         </View>
     )
@@ -246,8 +239,15 @@ PaystackWebView.propTypes = {
     onDismiss: PropTypes.func,
     onSuccess: PropTypes.func,
     indicatorColor: PropTypes.string,
-    progressIndicator: PropTypes.func,
+    renderIndicator: PropTypes.func,
     label: PropTypes.string,
+
+}
+
+PaystackWebView.defaultProps = {
+
+    indicatorColor: "#126B9D",
+    currency: "NGN",
 
 }
 
