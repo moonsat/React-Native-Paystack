@@ -239,7 +239,7 @@ PaystackWebView.propTypes = {
     customerLastName: PropTypes.string,
     currency: PropTypes.string,
     onError: PropTypes.func,
-    onDismiss: PropTypes.func,
+    onDismissed: PropTypes.func,
     onSuccess: PropTypes.func,
     indicatorColor: PropTypes.string,
     renderIndicator: PropTypes.func,
