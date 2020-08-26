@@ -5,13 +5,13 @@ import WebView from "react-native-webview";
 
 const Status = { //status enums
     DEFAULT: "",
-    LOADING : "loading",
+    LOADING: "loading",
     ERROR: "error",
     LOADED: "loaded"
-  }
+}
 
 
-function PaystackWebView(props) {
+const PaystackWebView = React.forwardRef((props, ref)=>{
 
     const PAYSTACK_KEY = props.paystackKey;
 
@@ -19,7 +19,7 @@ function PaystackWebView(props) {
 
     const CUSTOMER_FIRSTNAME = props.customerFirstName;
 
-    const CUSTOMER_LASTNAME = props.customerLastName; 
+    const CUSTOMER_LASTNAME = props.customerLastName;
 
     const AMOUNT_TO_CHARGE = props.amount; //payment amount
 
@@ -31,13 +31,29 @@ function PaystackWebView(props) {
 
     const METADATA = props.metadata;  // extra paystack payment metadata
 
+    const PAYMENT_CHANNELS = props.channels;
+
     const [paystackLoadingStatus, setPaystackLoadingStatus] = useState(Status.DEFAULT);
+
 
     useEffect(() => {
 
-        setPaystackLoadingStatus(Status.LOADING);
+        //setPaystackLoadingStatus(Status.LOADING);
 
     }, []);
+
+
+    const getConfiguredChannels = ()=>{
+
+        if(PAYMENT_CHANNELS && PAYMENT_CHANNELS.length > 0){
+
+            return `channels: ${JSON.stringify(PAYMENT_CHANNELS)},`;
+
+        }
+
+        return "";
+
+    }
 
 
     let htmlSource = `<html><head><title>Payment</title>
@@ -73,8 +89,9 @@ function PaystackWebView(props) {
                     firstname: '${CUSTOMER_FIRSTNAME}',
                     lastname: '${CUSTOMER_LASTNAME}',
                     label: '${LABEL || EMAIL_ADDRESS}',
-                    metadata: ${JSON.stringify(METADATA || {})},
-                    callback: function(response){
+                    metadata: ${JSON.stringify(METADATA || {})},` + 
+                    getConfiguredChannels() + 
+                    `callback: function(response){
                             var resp = {success:true, paystack:response};
                             window.ReactNativeWebView.postMessage(JSON.stringify(resp))
                     },
@@ -97,10 +114,10 @@ function PaystackWebView(props) {
     </html>`;
 
 
+ 
+    const onSuccess = (response) => {
 
-    const onSuccess = (response)=>{
-
-        if(props.onSuccess){
+        if (props.onSuccess) {
 
             props.onSuccess(response);
 
@@ -108,22 +125,22 @@ function PaystackWebView(props) {
 
     }
 
-    const onDismissed = ()=>{
+    const onDismissed = () => {
 
-        if(props.onDismissed){
-            
+        if (props.onDismissed) {
+
             props.onDismissed();
 
         }
 
     }
 
-    const onError = ()=>{
+    const onError = () => {
 
-        if(props.onError){
+        if (props.onError) {
 
             props.onError();
-        
+
         }
 
     }
@@ -135,13 +152,14 @@ function PaystackWebView(props) {
 
             <WebView
 
+                ref={ref}
 
                 javaScriptEnabled={true} //enabling JavaScript
 
                 onLoadStart={() => {
 
                     setPaystackLoadingStatus(Status.LOADING);
-                
+
                 }}
 
                 onLoadEnd={(event) => {
@@ -150,7 +168,7 @@ function PaystackWebView(props) {
 
                 }}
 
-             
+
                 onMessage={(event) => {
 
                     var result = event.nativeEvent.data;
@@ -160,25 +178,25 @@ function PaystackWebView(props) {
                     if (response.success && response.paystack) {
 
                         onSuccess(response.paystack);
-                        
+
 
                     }
 
                     else {
 
-                        if(response.reason == "closed"){
+                        if (response.reason == "closed") {
 
                             onDismissed();
 
                         }
 
-                        else{
+                        else {
 
                             onError();
 
                         }
 
-                     
+
                     }
 
 
@@ -192,7 +210,7 @@ function PaystackWebView(props) {
 
     const getLoadingView = () => {
 
-        return <View style={{ flex: 1, justifyContent: "center",  alignContent:"center", alignSelf:"center" }}>
+        return <View style={{ flex: 1, justifyContent: "center", alignContent: "center", alignSelf: "center" }}>
 
             {props.renderIndicator ? props.renderIndicator() : <ActivityIndicator size={'large'} color={INDICATOR_COLOR}></ActivityIndicator>}
 
@@ -207,7 +225,7 @@ function PaystackWebView(props) {
 
             case Status.LOADING:
 
-                return  getLoadingView();
+                return getLoadingView();
 
             default:
                 return <View></View>
@@ -218,7 +236,7 @@ function PaystackWebView(props) {
 
     return (
 
-        <View style={{ flex: 1, height:"100%", width:"100%" }}>
+        <View style={{ flex: 1, height: "100%", width: "100%" }}>
 
             {getMainComponent()}
 
@@ -227,7 +245,7 @@ function PaystackWebView(props) {
         </View>
     )
 
-}
+});
 
 
 PaystackWebView.propTypes = {
@@ -245,6 +263,8 @@ PaystackWebView.propTypes = {
     renderIndicator: PropTypes.func,
     label: PropTypes.string,
     metadata: PropTypes.object,
+    channels: PropTypes.array,
+    
 }
 
 PaystackWebView.defaultProps = {
