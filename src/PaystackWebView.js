@@ -37,14 +37,6 @@ const PaystackWebView = React.forwardRef((props, ref)=>{
 
     const [paystackLoadingStatus, setPaystackLoadingStatus] = useState(Status.DEFAULT);
 
-
-    useEffect(() => {
-
-        //setPaystackLoadingStatus(Status.LOADING);
-
-    }, []);
-
-
     const getConfiguredChannels = ()=>{
 
         if(PAYMENT_CHANNELS && PAYMENT_CHANNELS.length > 0){
@@ -293,5 +285,7 @@ PaystackWebView.defaultProps = {
     metadata: {},
 
 }
+
+PaystackWebView.displayName = "PaystackWebView"; // to change display name from forward ref.
 
 export default PaystackWebView;

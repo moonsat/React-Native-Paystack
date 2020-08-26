@@ -6,7 +6,8 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useRef } from 'react';
+
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,27 +15,58 @@ import {
   View,
   Text,
   StatusBar,
+  Button,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 import PaystackWebView from 'react-native-paystack';
 
-const App =  () => {
+const App = () => {
+
+  const ref = useRef(null);
+
+  const [showPayment, setShowPayment] = React.useState(false);
+
   return (
 
-    <View style={{flex:1}}>
-    
+    <View style={{ flex: 1, alignItems:"center", justifyContent:"center" }}>
 
-      <PaystackWebView  onError={()=>{alert("error")}}
-      onDismissed={()=>{alert("User cancelled payment")}}
-      onSuccess={(response)=>{alert(response.reference)}}
-      paystackKey={"pk_test_caf268193fad2d15a202977bd8553184c99a52dd"} customerEmail={"alexsirguy@gmail.com"} amount={100000}  />
+
+      {!showPayment && <Button onPress={()=>{
+        setShowPayment(true)
+      }} title="Checkout"   />}
+
+
+      {showPayment && <PaystackWebView
+
+        ref={ref} 
+        
+        onError={() => {
+
+          setShowPayment(false);
+
+          alert("Failed...")
+
+        }}
+
+        metadata={{ custom_fields: [{ display_name: "Demo Checkout" }] }}
+
+        onDismissed={() => {
+
+          ref.current.reload(); //reload if dismissed.
+
+        }}
+
+        onSuccess={(response) => { 
+          
+          setShowPayment(false);
+
+          console.log({response});
+
+          alert(`Transaction successful: ${response.reference}`) 
+        
+        }}
+  
+        paystackKey={"pk_test_caf268193fad2d15a202977bd8553184c99a52dd"} customerEmail={"abel@example.com"} amount={6000 * 100} />}
 
     </View>
 
