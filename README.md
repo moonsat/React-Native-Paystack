@@ -5,20 +5,20 @@ A super simple and lightweight react-native package for accepting payments using
 ## Installation
 Add React-Native-Paystack-Popup to your project by running:
 
-npm install react-native-paystack-popup
+`npm install react-native-paystack-popup`
 
 or
 
-yarn add react-native-paystack-popup
+`yarn add react-native-paystack-popup`
 
 ## Dependency
 This package is dependent on [react-native-webview](https://github.com/react-native-community/react-native-webview). Install the dependency by running the following command on your terminal:
 
-yarn add react-native-webview
+`yarn add react-native-webview`
 
 or 
 
-npm install react-native-webview
+`npm install react-native-webview`
 
 ## DEMO
 <h1>
