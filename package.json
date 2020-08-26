@@ -1,6 +1,6 @@
 {
   "name": "react-native-paystack-popup",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "A simple react-native webview library for paystack",
   "main": "index.js",
   "scripts": {
