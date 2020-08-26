@@ -33,6 +33,8 @@ const PaystackWebView = React.forwardRef((props, ref)=>{
 
     const PAYMENT_CHANNELS = props.channels;
 
+    const TRANSACTION_REF = props.transactionRef;
+
     const [paystackLoadingStatus, setPaystackLoadingStatus] = useState(Status.DEFAULT);
 
 
@@ -56,6 +58,19 @@ const PaystackWebView = React.forwardRef((props, ref)=>{
     }
 
 
+    const getConfiguredTransactionRef = ()=>{
+
+        if(TRANSACTION_REF && TRANSACTION_REF.trim().length > 0){
+
+            return `ref: ${TRANSACTION_REF},`;
+
+        }
+
+        return  "";
+
+    }
+
+
     let htmlSource = `<html><head><title>Payment</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
@@ -71,7 +86,7 @@ const PaystackWebView = React.forwardRef((props, ref)=>{
             function payWithPaystack(){
          
                 
-                if(!window.PaystackPop){ //if paystack is loaded
+                if(!window.PaystackPop){ //if paystack is not loaded
 
                     var resp = {reason:'failed', success:false, paystack:null};
 
@@ -91,6 +106,7 @@ const PaystackWebView = React.forwardRef((props, ref)=>{
                     label: '${LABEL || EMAIL_ADDRESS}',
                     metadata: ${JSON.stringify(METADATA || {})},` + 
                     getConfiguredChannels() + 
+                    getConfiguredTransactionRef() +
                     `callback: function(response){
                             var resp = {success:true, paystack:response};
                             window.ReactNativeWebView.postMessage(JSON.stringify(resp))
@@ -151,6 +167,8 @@ const PaystackWebView = React.forwardRef((props, ref)=>{
         return <View style={{ height: paystackLoadingStatus == Status.LOADED ? "100%" : "0%" }}>
 
             <WebView
+
+            
 
                 ref={ref}
 
@@ -264,7 +282,8 @@ PaystackWebView.propTypes = {
     label: PropTypes.string,
     metadata: PropTypes.object,
     channels: PropTypes.array,
-    
+    transactionRef: PropTypes.string,
+
 }
 
 PaystackWebView.defaultProps = {
