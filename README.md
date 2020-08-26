@@ -3,7 +3,7 @@
 A super simple and lightweight react-native package for accepting payments using paystack. Doesn't require any form of linking, just install and start using.
 
 ## Installation
-Add React-Native-Paystack-Popup to your project by running;
+Add React-Native-Paystack-Popup to your project by running:
 
 npm install react-native-paystack-popup
 
@@ -22,7 +22,7 @@ npm install react-native-webview
 
 ### Usage Example
 
-``` javascript
+```jsx
 import React, { useRef } from 'react';
 
 import {
@@ -100,16 +100,27 @@ const App = () => {
 | indicatorColor   | No | Color name for the default loading indicator |
 | renderIndicator   | No | Override this function and return a component to change the default loading indicator|
 
+## Maintenance
+
+This project is actively maintained by the following developers:
+
+- [Abel Joshua](https://github.com/iamabeljoshua) ([Twitter @iamabeljoshua](https://twitter.com/iamabeljoshua))
 
 
-For more information, check the [Examples App](https://github.com/moonsat/React-Native-Paystack/tree/master/examples).
+### Example App
 
-If you encounter any problem using this library, open up an [issue](https://github.com/moonsat/React-Native-Paystack/issues) 
+For more information and usage guidelines, check the [Examples App](https://github.com/moonsat/React-Native-Paystack/tree/master/examples).
 
-### Contributing
+If you encounter any problem using this library, open a new [issue](https://github.com/moonsat/React-Native-Paystack/issues)
 
-If you want to make contribution to this library, read the [contribution guideline] (https://github.com/moonsat/React-Native-Paystack/tree/master/contribution.md)
+### Contribution
 
+If you want to make contribution to this library:
 
+- Fork this project.
+- Each new feature must be a new PR.
+- Explain exactly what your PR is suppose to do.
+
+Your PR will reviewed and merged!
 
 
