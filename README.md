@@ -20,6 +20,14 @@ or
 
 npm install react-native-webview
 
+## DEMO
+<h1>
+<img src="https://github.com/moonsat/React-Native-Paystack/blob/master/examples/screenshots/1.png" alt="Screenshot 1" width="280" height="500">
+
+<img src="https://github.com/moonsat/React-Native-Paystack/blob/master/examples/screenshots/2.png" alt="Screenshot 1" width="280" height="500">
+
+</h1>
+
 ### Usage Example
 
 ```jsx
