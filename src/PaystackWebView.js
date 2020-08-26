@@ -62,7 +62,7 @@ const PaystackWebView = React.forwardRef((props, ref)=>{
 
         if(TRANSACTION_REF && TRANSACTION_REF.trim().length > 0){
 
-            return `ref: ${TRANSACTION_REF},`;
+            return `ref: '${TRANSACTION_REF}',`;
 
         }
 
