@@ -22,9 +22,9 @@ or
 
 ## DEMO
 <h1>
-<img src="https://github.com/moonsat/React-Native-Paystack/raw/master/examples/screenshots/1.png" alt="Screenshot 1" width="280" height="500">
+<img src="https://github.com/moonsat/React-Native-Paystack/raw/master/examples/screenshots/1.png" alt="Screenshot 1" width="280" height="500"/>
 
-<img src="https://github.com/moonsat/React-Native-Paystack/raw/master/examples/screenshots/2.png" alt="Screenshot 1" width="280" height="500">
+<img src="https://github.com/moonsat/React-Native-Paystack/raw/master/examples/screenshots/2.png" alt="Screenshot 2" width="280" height="500"/>
 
 </h1>
 
