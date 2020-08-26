@@ -102,4 +102,14 @@ const App = () => {
 
 
 
+For more information, check the [Examples App](https://github.com/moonsat/React-Native-Paystack/tree/master/examples).
+
+If you encounter any problem using this library, open up an [issue](https://github.com/moonsat/React-Native-Paystack/issues) 
+
+### Contributing
+
+If you want to make contribution to this library, read the [contribution guideline] (https://github.com/moonsat/React-Native-Paystack/tree/master/contribution.md)
+
+
+
 
