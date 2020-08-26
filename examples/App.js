@@ -9,16 +9,11 @@
 import React, { useRef } from 'react';
 
 import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
   View,
-  Text,
-  StatusBar,
   Button,
 } from 'react-native';
 
-import PaystackWebView from 'react-native-paystack';
+import PaystackWebView from 'react-native-paystack-popup';
 
 const App = () => {
 
@@ -46,7 +41,7 @@ const App = () => {
 
           alert("Failed...")
 
-        }}
+        }}        
 
         metadata={{ custom_fields: [{ display_name: "Demo Checkout" }] }}
 

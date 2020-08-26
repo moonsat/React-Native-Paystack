@@ -38,7 +38,7 @@ import {
   Button,
 } from 'react-native';
 
-import PaystackWebView from 'react-native-paystack';
+import PaystackWebView from 'react-native-paystack-popup';
 
 const App = () => {
 
